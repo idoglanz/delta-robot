@@ -20,6 +20,7 @@ class InverseKinematics:
         return np.vstack([self.gripper_triangle*(np.cos(self.theta)),self.gripper_triangle*(np.sin(self.theta)), np.zeros([3])]).T
 
     def inverse(self, desired_loc_xyz:np.array):
+        
         r = self.r
         R = self.R + desired_loc_xyz.T
         Cr = (R[:,0] - r[:,0])*np.cos(self.theta) + (R[:,1] - r[:,1])*np.sin(self.theta)
