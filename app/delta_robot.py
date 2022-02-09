@@ -1,7 +1,7 @@
 import numpy as np
 import plotly.graph_objects as go
 from tenacity import retry
-from app.inverse_kinematics import InverseKinematics
+from inverse_kinematics import InverseKinematics
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,6 +34,16 @@ class DeltaRobot:
             self.phi = _phi
             self.gripper_loc = xyz
         return list(self.gripper_loc)
+
+    def update_structure(self, **kwargs):
+        # update the structure of the robot
+        self.base_radius = kwargs.get('base_radius') if kwargs.get('base_radius') else self.base_radius
+        self.gripper_radius = kwargs.get('gripper_radius') if kwargs.get('gripper_radius') else self.gripper_radius
+        self.active_arm = kwargs.get('active_arm') if kwargs.get('active_arm') else self.active_arm
+        self.passive_arm = kwargs.get('passive_arm') if kwargs.get('passive_arm') else self.passive_arm
+        self.inverse_k = InverseKinematics(
+            self.base_radius, self.gripper_radius, self.active_arm, self.passive_arm, theta=self.theta
+        )
 
     def draw(self):
         # note order does matter
