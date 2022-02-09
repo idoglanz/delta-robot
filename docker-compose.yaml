@@ -1,0 +1,17 @@
+version: '3'
+services:
+
+  dashboard:
+    image: dash_app:1.0
+    container_name: dash_dashboard
+    restart: always
+    ports:
+      - 8050:8050
+    # volumes:
+    #   - ./app:wd/
+    networks:
+      - network 
+
+networks:
+  network:
+    driver: bridge

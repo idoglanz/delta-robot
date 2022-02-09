@@ -8,9 +8,9 @@ authors = ["idoglanz <ido.glanz@valerann.com>"]
 python = "^3.9"
 numpy = "^1.22.2"
 plotly = "^5.5.0"
-visual-kinematics = "^0.1.0"
 dash = "^2.1.0"
-pandas = "^1.4.0"
+Flask = "^2.0.2"
+gunicorn = "^20.1.0"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^22.1.0", allow-prereleases = true}

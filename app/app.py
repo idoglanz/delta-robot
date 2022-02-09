@@ -1,48 +1,72 @@
 from tracemalloc import start
+
 import dash
-from dash import Dash, dcc, html, Input, Output
-import plotly.graph_objects as go
-from app.delta_robot import DeltaRobot
+from dash import Dash, Input, Output, dcc, html
+from flask import Flask
+
+from delta_robot import DeltaRobot
+
+server = Flask(__name__)
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
+app = Dash(server=server, external_stylesheets=external_stylesheets)
+app.title = "Delta-Robot"
 
 robot = DeltaRobot(base_radius=20, gripper_radius=12, active_arm=15, passive_arm=40)
 start_pose = [0, 0, -40]
 
-app = Dash(__name__, external_stylesheets=external_stylesheets)
 # app = Dash(__name__)
 
 app.layout = html.Div(
     [
         html.Div(
             [
-                html.H1("A Delta Robot Simulator",style={'color':'#00361c','text-align':'left'
-          }),
+                html.H1("A Delta Robot Simulator", style={"color": "#00361c", "text-align": "left"}),
                 html.Div(
                     [
-                        html.Button(id="move_up", n_clicks=0, children="Move Up",style={'width':"15"}),
-                        html.Button(id="move_down", n_clicks=0, children="Move Down",style={'width':"15"}),
+                        html.Button(id="move_up", n_clicks=0, children="Move Up", style={"width": "15"}),
+                        html.Button(id="move_down", n_clicks=0, children="Move Down", style={"width": "15"}),
                     ],
-                    style={"vertical-align": "top", "margin-left": "10vw", "margin-top": "3vw", "margin-bottom": "2vw"},
+                    style={
+                        "vertical-align": "top",
+                        "margin-left": "10vw",
+                        "margin-top": "3vw",
+                        "margin-bottom": "2vw",
+                    },
                 ),
                 html.Div(
                     [
-                        html.Button(id="move_forward", n_clicks=0, children="Move Forward",style={'width':"15"}),
+                        html.Button(id="move_forward", n_clicks=0, children="Move Forward", style={"width": "15"}),
                     ],
-                    style={"vertical-align": "top", "margin-left": "13vw", "margin-top": "3vw", "margin-bottom": "2vw"},
+                    style={
+                        "vertical-align": "top",
+                        "margin-left": "13vw",
+                        "margin-top": "3vw",
+                        "margin-bottom": "2vw",
+                    },
                 ),
                 html.Div(
                     [
-                        html.Button(id="move_right", n_clicks=0, children="Move Right",style={'width':"15"}),
-                        html.Button(id="move_left", n_clicks=0, children="Move Left",style={'width':"15"}),
+                        html.Button(id="move_right", n_clicks=0, children="Move Right", style={"width": "15"}),
+                        html.Button(id="move_left", n_clicks=0, children="Move Left", style={"width": "15"}),
                     ],
-                    style={"vertical-align": "top", "margin-left": "10vw", "margin-top": "3vw", "margin-bottom": "2vw"},
+                    style={
+                        "vertical-align": "top",
+                        "margin-left": "10vw",
+                        "margin-top": "3vw",
+                        "margin-bottom": "2vw",
+                    },
                 ),
                 html.Div(
                     [
-                        html.Button(id="move_back", n_clicks=0, children="Move Back",style={'width':"15"}),
+                        html.Button(id="move_back", n_clicks=0, children="Move Back", style={"width": "15"}),
                     ],
-                    style={"vertical-align": "top", "margin-left": "13vw", "margin-top": "3vw", "margin-bottom": "2vw"},
+                    style={
+                        "vertical-align": "top",
+                        "margin-left": "13vw",
+                        "margin-top": "3vw",
+                        "margin-bottom": "2vw",
+                    },
                 ),
             ],
             style={"width": "30%", "display": "inline-block", "horizontal-align": "right", "vertical-align": "top"},
@@ -119,4 +143,4 @@ def update_figure(b1, b2, b3, b4, b5, b6):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=8050)
