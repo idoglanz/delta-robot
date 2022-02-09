@@ -14,6 +14,7 @@ class DeltaRobot:
         self.active_arm = active_arm
         self.passive_arm = passive_arm
         self.theta = [0, 120, 240]
+        self.line_width = 4
         self.inverse_k = InverseKinematics(
             self.base_radius, self.gripper_radius, self.active_arm, self.passive_arm, theta=self.theta
         )
@@ -24,6 +25,7 @@ class DeltaRobot:
         self.base_coordinates = None
         self.gripper_coordinates = None
         self.arms_coordinates = None
+        print(f'theta = {self.theta}')
 
     def update_pose(self, xyz):
         self.fig.data = []
@@ -35,12 +37,20 @@ class DeltaRobot:
             self.gripper_loc = xyz
         return list(self.gripper_loc)
 
-    def update_structure(self, **kwargs):
+    def update_structure(self,input):
         # update the structure of the robot
-        self.base_radius = kwargs.get('base_radius') if kwargs.get('base_radius') else self.base_radius
-        self.gripper_radius = kwargs.get('gripper_radius') if kwargs.get('gripper_radius') else self.gripper_radius
-        self.active_arm = kwargs.get('active_arm') if kwargs.get('active_arm') else self.active_arm
-        self.passive_arm = kwargs.get('passive_arm') if kwargs.get('passive_arm') else self.passive_arm
+        print(input)
+        self.base_radius = input.get('base_radius') if input.get('base_radius') else self.base_radius
+        self.gripper_radius = input.get('gripper_radius') if input.get('gripper_radius') else self.gripper_radius
+        self.active_arm = input.get('active_arm') if input.get('active_arm') else self.active_arm
+        self.passive_arm = input.get('passive_arm') if input.get('passive_arm') else self.passive_arm
+        print('>>>>')
+        print(self.base_radius)
+        print(self.gripper_radius)
+        print(self.active_arm)
+        print(self.passive_arm)
+        print(f'theta = {self.theta}')
+
         self.inverse_k = InverseKinematics(
             self.base_radius, self.gripper_radius, self.active_arm, self.passive_arm, theta=self.theta
         )
@@ -51,7 +61,7 @@ class DeltaRobot:
         self.draw_gripper()
         self.draw_active_arms()
         self.draw_passive_arms()
-        d = 3 * self.base_radius
+        d = 2 * max(self.base_radius,self.passive_arm)
         self.fig.update_layout(
             scene=dict(
                 xaxis=dict(
@@ -77,7 +87,7 @@ class DeltaRobot:
 
     def draw_base(self, **kwargs):
         # draw the top static triangle
-        _theta = self.theta
+        _theta = self.theta.copy()
         _theta.append(self.theta[0])  # to get a "closed" triangle
         _theta = np.array(_theta) * np.pi / 180
         _r = np.expand_dims(np.array([self.base_radius, 0, 0]), 1)
@@ -88,14 +98,14 @@ class DeltaRobot:
                 y=triangle[:, 1],
                 z=triangle[:, 2],
                 mode="lines",
-                line={"width": 2, "color": "red"},
+                line={"width": self.line_width, "color": "#b40000"},
                 name="Top",
             )
         )
         self.base_coordinates = triangle
 
     def draw_gripper(self, **kwargs):
-        _theta = self.theta
+        _theta = self.theta.copy()
         _theta.append(self.theta[0])  # to get a "closed" triangle
         _theta = np.array(_theta) * np.pi / 180
         _r = np.expand_dims(np.array([self.gripper_radius, 0, 0]), 1)
@@ -106,7 +116,7 @@ class DeltaRobot:
                 y=triangle[:, 1],
                 z=triangle[:, 2],
                 mode="lines",
-                line={"width": 2, "color": "blue"},
+                line={"width": self.line_width, "color": "#03396c"},
                 name="Gripper",
             )
         )
@@ -127,7 +137,7 @@ class DeltaRobot:
                     y=[p1[1], p2[1]],
                     z=[p1[2], p2[2]],
                     mode="lines",
-                    line={"width": 2, "color": "green"},
+                    line={"width": self.line_width, "color": "#2f5233"},
                     name="active_arm",
                 )
             )
@@ -141,7 +151,7 @@ class DeltaRobot:
                     y=[p1[1], p2[1]],
                     z=[p1[2], p2[2]],
                     mode="lines",
-                    line={"width": 2, "color": "orange"},
+                    line={"width": self.line_width, "color": "#f5a335"},
                     name="passive_arm",
                 )
             )

@@ -29,7 +29,7 @@ class InverseKinematics:
         C = np.sqrt(Cr**2 + Cz**2)
         alpha = -np.arctan2(Cz,Cr)*180/np.pi
         beta_rad = (A**2 + C**2 - B**2)/(2*A*C)
-        if any(np.abs(beta_rad) <= 1):
+        if all(np.abs(beta_rad) <= 1):
             beta = np.arccos(beta_rad)*180/np.pi
             phiA = -(alpha-beta)
             return phiA
