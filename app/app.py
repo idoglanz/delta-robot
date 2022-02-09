@@ -2,7 +2,6 @@ from tracemalloc import start
 
 import dash
 from dash import Dash, Input, Output, dcc, html
-import dash_bootstrap_components as dbc
 from flask import Flask
 
 from delta_robot import DeltaRobot
