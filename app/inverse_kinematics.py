@@ -1,15 +1,12 @@
 import numpy as np
 
-
 class InverseKinematics:
-    def __init__(self, base_triangle, gripper_triangle, rod_active,rod_passive) -> None:
+    def __init__(self, base_triangle, gripper_triangle, rod_active,rod_passive, theta) -> None:
         self.base_triangle = base_triangle
         self.gripper_triangle = gripper_triangle
         self.rod_active = rod_active
         self.rod_passive = rod_passive
-        self.gripper_loc = [0,0,0]
-        self.motor_angles = [0,0,0]
-        self.theta = np.array([0,120,-120]).T*np.pi/180
+        self.theta = np.array(theta).T*np.pi/180
 
     @property
     def r(self):
@@ -35,17 +32,16 @@ class InverseKinematics:
         if any(np.abs(beta_rad) <= 1):
             beta = np.arccos(beta_rad)*180/np.pi
             phiA = -(alpha-beta)
-            print(phiA)
-            self.motor_angles = phiA
+            return phiA
         else:
             print('Something is off with the settings or pose out of reach')
+            return None
+            
 
-        return self.motor_angles
+if __name__ == "__main__":
+    robot = InverseKinematics(base_triangle=75,gripper_triangle=24,rod_active=100,rod_passive=300)
 
-
-robot = InverseKinematics(base_triangle=75,gripper_triangle=24,rod_active=100,rod_passive=300)
-
-robot.inverse(np.array([0,0,-200]))
+    robot.inverse(np.array([0,0,-200]))
 
 # //float a = 3.14159; // length of hip
 # //float b = 5*sqrt(2); // length of ankle

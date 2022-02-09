@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "delta-robot"
+name = "app"
 version = "0.1.0"
 description = "A module for controlling a 3dp delta robot"
 authors = ["idoglanz <ido.glanz@valerann.com>"]
@@ -9,8 +9,11 @@ python = "^3.9"
 numpy = "^1.22.2"
 plotly = "^5.5.0"
 visual-kinematics = "^0.1.0"
+dash = "^2.1.0"
+pandas = "^1.4.0"
 
 [tool.poetry.dev-dependencies]
+black = {version = "^22.1.0", allow-prereleases = true}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
