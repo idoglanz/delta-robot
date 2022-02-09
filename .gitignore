@@ -1,3 +1,4 @@
 .vscode/
 app/__pycache__
 *.tar
+.DS_Store

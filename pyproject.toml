@@ -11,6 +11,7 @@ plotly = "^5.5.0"
 dash = "^2.1.0"
 Flask = "^2.0.2"
 gunicorn = "^20.1.0"
+dash-bootstrap-components = "^1.0.3"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^22.1.0", allow-prereleases = true}
