@@ -213,6 +213,7 @@ def update_figure(b1, b2, b3, b4, b5, b6, b_reset):
         start_pose[0] -= inc
     if button_id == "reset":
         start_pose = [0, 0, -40]
+        robot.reset_trace(start_pose)
     start_pose = robot.update_pose(start_pose)
     print(start_pose)
     plot = robot.draw()

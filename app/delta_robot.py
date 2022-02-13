@@ -25,7 +25,7 @@ class DeltaRobot:
         self.base_coordinates = None
         self.gripper_coordinates = None
         self.arms_coordinates = None
-        print(f'theta = {self.theta}')
+        self.trace = []
 
     def update_pose(self, xyz):
         self.fig.data = []
@@ -35,33 +35,30 @@ class DeltaRobot:
         if _phi is not None:
             self.phi = _phi
             self.gripper_loc = xyz
+            self.trace.append(list(xyz))
         return list(self.gripper_loc)
 
     def update_structure(self,input):
         # update the structure of the robot
-        print(input)
         self.base_radius = input.get('base_radius') if input.get('base_radius') else self.base_radius
         self.gripper_radius = input.get('gripper_radius') if input.get('gripper_radius') else self.gripper_radius
         self.active_arm = input.get('active_arm') if input.get('active_arm') else self.active_arm
         self.passive_arm = input.get('passive_arm') if input.get('passive_arm') else self.passive_arm
-        print('>>>>')
-        print(self.base_radius)
-        print(self.gripper_radius)
-        print(self.active_arm)
-        print(self.passive_arm)
-        print(f'theta = {self.theta}')
-
         self.inverse_k = InverseKinematics(
             self.base_radius, self.gripper_radius, self.active_arm, self.passive_arm, theta=self.theta
         )
 
+    def reset_trace(self,xyz):
+        self.trace = [xyz]
+        
     def draw(self):
         # note order does matter
         self.draw_base()
         self.draw_gripper()
         self.draw_active_arms()
         self.draw_passive_arms()
-        d = 2 * max(self.base_radius,self.passive_arm)
+        self.draw_trace()
+        d = max(self.base_radius,self.passive_arm) + 10
         self.fig.update_layout(
             scene=dict(
                 xaxis=dict(
@@ -74,7 +71,7 @@ class DeltaRobot:
                 ),
                 zaxis=dict(
                     nticks=4,
-                    range=[-d, d],
+                    range=[-d, 10],
                 ),
             ),
             width=700,
@@ -155,7 +152,21 @@ class DeltaRobot:
                     name="passive_arm",
                 )
             )
-
+    def draw_trace(self):
+        if len(self.trace):
+            _trace = np.array(self.trace)
+            print('----------')
+            print(_trace)
+            self.fig.add_trace(
+                go.Scatter3d(
+                    x=_trace[:,0],
+                    y=_trace[:,1],
+                    z=_trace[:,2],
+                    mode="lines",
+                    line={"width": 1, "color": "#fe5757"},
+                    name="trace",
+                )
+            )
     @staticmethod
     def rotM(theta_rad, axis: str = "z"):
 
