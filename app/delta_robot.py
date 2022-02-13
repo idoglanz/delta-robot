@@ -58,7 +58,7 @@ class DeltaRobot:
         self.draw_active_arms()
         self.draw_passive_arms()
         self.draw_trace()
-        d = 2 * max(self.base_radius,self.passive_arm)
+        d = max(self.base_radius,self.passive_arm) + 10
         self.fig.update_layout(
             scene=dict(
                 xaxis=dict(
@@ -71,7 +71,7 @@ class DeltaRobot:
                 ),
                 zaxis=dict(
                     nticks=4,
-                    range=[-d, d],
+                    range=[-d, 10],
                 ),
             ),
             width=700,
@@ -163,8 +163,8 @@ class DeltaRobot:
                     y=_trace[:,1],
                     z=_trace[:,2],
                     mode="lines",
-                    line={"width": self.line_width, "color": "#feabab"},
-                    name="passive_arm",
+                    line={"width": 1, "color": "#fe5757"},
+                    name="trace",
                 )
             )
     @staticmethod
