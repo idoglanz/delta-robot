@@ -7,8 +7,8 @@ services:
     restart: always
     ports:
       - 8050:8050
-    # volumes:
-    #   - ./app:wd/
+    volumes:
+      - ./gcode:/wd/gcode
     networks:
       - network 
 
